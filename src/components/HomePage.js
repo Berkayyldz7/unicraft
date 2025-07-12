@@ -1,5 +1,4 @@
 import Navbar2 from "./NavBar2";
-import FeaturedCard from "./FeaturedCard";
 import CardCarousel from "./CardCarousel";
 
 

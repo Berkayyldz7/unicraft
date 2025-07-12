@@ -1,11 +1,15 @@
-import React from 'react';
+// CRUCIAL NOTES 
+
+// Gösterilen Card Sayısı en az 7 olmalı aksi halde Caruosel Patlıyor.
+
+import React, { useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectCoverflow } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
 
-const baseData = [
+const cardData = [
   {
     title: 'Move Registry Improves Developer Experience on Sui',
     subtitle: 'Announcing the Move Registry (MVR): Radical Interoperability',
@@ -26,28 +30,70 @@ const baseData = [
     tag: 'Games',
     link: 'https://blog.sui.io/parasol-mysten-labs-trading-card-games/',
     img: 'https://cdn.prod.website-files.com/6425f546844727ce5fb9e5ab/680f1bf26b5bfd247785ac0c_Parasol-feature.avif'
+  },
+  {
+    title: 'Dummy-1',
+    subtitle: 'Dummmmm',
+    tag: 'Games',
+    link: 'https://blog.sui.io/parasol-mysten-labs-trading-card-games/',
+    img: 'https://cdn.prod.website-files.com/6425f546844727ce5fb9e5ab/680f1bf26b5bfd247785ac0c_Parasol-feature.avif'
+  },
+  {
+    title: 'Dummy-2',
+    subtitle: 'Dummy-2',
+    tag: 'Games',
+    link: 'https://blog.sui.io/parasol-mysten-labs-trading-card-games/',
+    img: 'https://cdn.prod.website-files.com/6425f546844727ce5fb9e5ab/680f1bf26b5bfd247785ac0c_Parasol-feature.avif'
+  },
+  {
+    title: 'Parasol Brings Trading Card Gaming to Sui',
+    subtitle: 'New immersive blockchain-based TCG',
+    tag: 'Games',
+    link: 'https://blog.sui.io/parasol-mysten-labs-trading-card-games/',
+    img: 'https://cdn.prod.website-files.com/6425f546844727ce5fb9e5ab/680f1bf26b5bfd247785ac0c_Parasol-feature.avif'
+  },
+  {
+    title: 'Parasol Brings Trading Card Gaming to Sui',
+    subtitle: 'New immersive blockchain-based TCG',
+    tag: 'Games',
+    link: 'https://blog.sui.io/parasol-mysten-labs-trading-card-games/',
+    img: 'https://cdn.prod.website-files.com/6425f546844727ce5fb9e5ab/680f1bf26b5bfd247785ac0c_Parasol-feature.avif'
   }
 ];
 
-// Minimum 5 slayt için tekrarları çoğaltıyoruz
-const cardData = [...baseData, ...baseData];
-
 const CardCarousel = () => {
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (swiperRef.current && swiperRef.current.swiper) {
+        swiperRef.current.swiper.update();
+      }
+    }, 500); // 500ms gecikme DOM render sonrası garanti olur
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
-    <div className="w-full py-16 px-4 bg-[#0d0d22] text-white">
+    <div className="w-full py-16 px-4 bg-[#0d0d22] text-white relative">
       <Swiper
+        ref={swiperRef}
         modules={[Navigation, EffectCoverflow]}
         effect="coverflow"
         grabCursor
         centeredSlides
         slidesPerView="auto"
-        navigation
         loop
+        navigation
+        loopedSlides={cardData.length}
+        loopPreventsSlide={false}
+        watchSlidesProgress
+        initialSlide={1} // orta kartla başla (3 kart varsa ortası 1'dir)
         coverflowEffect={{
           rotate: 0,
           stretch: 0,
           depth: 150,
-          modifier: 2,
+          modifier: 2.5,
           slideShadows: false
         }}
         className="w-full max-w-6xl mx-auto"
@@ -55,20 +101,23 @@ const CardCarousel = () => {
         {cardData.map((card, index) => (
           <SwiperSlide
             key={index}
-            className="!w-[280px] sm:!w-[360px] md:!w-[480px] !h-[300px] md:!h-[340px] flex items-end"
+            className="!w-[90%] sm:!w-[420px] !h-[480px] flex flex-col justify-end"
           >
-            <div className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl">
-              <img
-                src={card.img}
-                alt={card.title}
-                className="w-full h-full object-cover absolute z-0"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
-              <div className="relative z-20 h-full flex flex-col justify-end p-6 space-y-2">
-                <span className="text-xs bg-white/20 px-3 py-1 rounded-full w-max">
+            <div className="bg-[#101529] rounded-2xl overflow-hidden shadow-xl w-full h-full flex flex-col">
+              <div className="h-1/2 w-full overflow-hidden">
+                <img
+                  src={card.img}
+                  alt={card.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4 flex flex-col justify-between flex-grow">
+                <span className="bg-white/10 text-xs text-white px-3 py-1 rounded-full w-max mb-2">
                   {card.tag}
                 </span>
-                <h3 className="text-white text-xl font-bold">{card.subtitle}</h3>
+                <h3 className="text-lg font-semibold mb-2 leading-tight">
+                  {card.subtitle}
+                </h3>
                 <a
                   href={card.link}
                   target="_blank"
