@@ -58,7 +58,7 @@ const NavBar2 = () => {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img src="https://raw.githubusercontent.com/MystenLabs/sui/main/doc/static/img/favicon.png" alt="Sui Logo" className="w-6 h-6" />
-          <span className="font-semibold text-xl text-white">Sui</span>
+          <span className="font-semibold text-xl text-white">Unicraft</span>
         </div>
 
         {/* Desktop Navigation */}
